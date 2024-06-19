@@ -1,0 +1,37 @@
+@startuml student
+autonumber "<b>[00]"
+center header <b> Student 
+'skinparam StudentFontSize 12
+
+actor User as u
+participant Student as Student
+database Database as DB
+
+== SignUp ==
+u -> Student: SignUp Request (First Name, Last Name, \n Email, Password)
+Student -> DB : VALIDATION REQUEST: Check if student account exists
+
+alt account doesn't exist
+Student -> DB : Create NEW Account Request (First Name, Last Name, \n Email, Password)
+else account exists
+Student --> u : Display Response message: "Entered information \n already exists"
+end
+
+Student -> UI : Display Response message "You have successfully \n created an account!", allow Student to Login \n with credentials 
+note right of Student  
+    Refer to Sign In Section
+end note 
+
+'////////////////////////////////////'
+
+== SignIn ==
+u -> Student: SignIn Request (Email, Password)
+Student -> DB : VALIDATION REQUEST: Check whether Email and Password match
+  
+alt Email & Password do not match
+DB --> Student: Display Response message "Email and Password entered do not match."
+else Email & Password match
+Student -> UI: Navigate Student to "CREATE..." Page Request
+end
+
+@enduml

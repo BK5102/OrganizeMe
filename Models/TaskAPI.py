@@ -33,8 +33,13 @@ def create_new_Task(task:Task_Serializer):
     
     new_task = Tasks(task.stuIDT,task.task)
 
-    db.add(new_task)
-    db.commit()
+    try:
+        db.add(new_task)
+    except:
+        db.rollback()
+        raise
+    else:
+        db.commit()
 
     return new_task
 
@@ -44,8 +49,13 @@ def remove_Task(taskID: int):
 
     if task_to_del is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource Not Found")
-
-    db.delete(task_to_del)
-    db.commit()
     
+    try:
+        db.delete(task_to_del)
+    except:
+        db.rollback()
+        raise
+    else:
+        db.commit()
+
     return task_to_del

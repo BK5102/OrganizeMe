@@ -38,14 +38,22 @@ def create_new_Assignment(assignment:Organizer_Serializer):
     
     new_assignment = ClassOrganizer(assignment.stuIDCO, assignment.stuCourse, assignment.stuAssign, assignment.date)
     
-    db.add(new_assignment)
-    db.commit()
-
+    try:
+        db.add(new_assignment)
+    except:
+        db.rollback()
+        raise
+    else:
+        db.commit()
+        
     return new_assignment
 
 @router.get("/assignment/{stu_Assign}", response_model=Organizer_Serializer, status_code=status.HTTP_200_OK)
 def get_Assignment(stu_Assign:str):
     assignment = db.query(ClassOrganizer).filter(ClassOrganizer.stuAssign == stu_Assign).first()
+    if assignment is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource Not Found")
+    
     return assignment
 
 @router.delete("/del_assignment/{stu_Assign}", response_model=Organizer_Serializer)
@@ -55,7 +63,12 @@ def remove_Assignment(stu_Assign: str):
     if assignment_to_del is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Resource Not Found")
 
-    db.delete(assignment_to_del)
-    db.commit()
-    
+    try:
+        db.delete(assignment_to_del)
+    except:
+        db.rollback()
+        raise
+    else:
+        db.commit()
+     
     return assignment_to_del
