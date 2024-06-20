@@ -1,0 +1,25 @@
+@startuml taskList
+autonumber "<b>[00]"
+center header <b> Tasks/To-Do 
+
+participant UI as UI
+participant Tasks as Tasks
+database Database as DB
+
+UI -> Tasks: Request for a Task to be Deleted 
+Tasks -> DB: Remove the Task
+Tasks --> UI: Display message Response: "Task successfully removed."
+
+UI -> Tasks: NEW Task Request (task)
+Tasks -> DB: VALIDATION RESPONSE: Check if Task exists
+
+alt Task does not exist
+DB --> Tasks: Display message Response: "Entered Task already exists."
+else Task exists 
+Tasks -> DB: Log NEW Task
+end
+Tasks --> UI: Display message Response: "Task successfully logged."
+
+
+
+@enduml

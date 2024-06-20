@@ -1,0 +1,52 @@
+@startuml course_organizer
+autonumber "<b>[00]"
+center header <b> Class Organizer 
+
+participant UI as UI
+participant Organizer as Organizer
+database Database as DB
+
+== Assignments ==
+UI -> Organizer: Get All Assignments (logged in Email)
+Organizer -> DB: Request all Assignments logged 
+DB --> Organizer: Assignments (Response)
+Organizer --> UI: Display all Assignments (Response)
+UI -> Organizer: Request for an Assignment [or Course] to be Deleted 
+Organizer -> DB: Remove an Assignment [or Course]
+Organizer --> UI: Display message Response: "Assignment [or Course] Successfully Deleted"
+
+UI -> Organizer: Request Assignment for corresponding class chosen
+Organizer -> DB: Request Assignment for specified class
+DB --> Organizer : Response for Assignment with due date
+Organizer --> UI: Display Assignment with class \n chosen and sorted due date (Response)
+
+UI -> Organizer: NEW Assignment Request (Name, Due Date)
+Organizer -> DB: VALIDATION REQUEST: Check if Assignment exists
+
+alt Assignment does not exist
+DB --> Organizer: Display message Response: "Assignment already logged."
+else Assignment exists 
+Organizer -> DB: Log NEW Assignment
+end
+Organizer--> UI: Display message Response: "Assignment successfully logged."
+
+UI -> Organizer: NEW Course Request (Name)
+Organizer -> DB: VALIDATION REQUEST: Check if Course exists
+
+alt Course does not exist
+Organizer -> DB: Display message Response: "Course already logged."
+else Course exists 
+DB --> Organizer: Log NEW Course
+end
+Organizer--> UI: Display message Response: "Course successfully logged."
+
+note right of DB  
+   DB -> External: Through Scheduler System, 
+   retrieve email and send reminder 5 days and 2 days 
+   before due date of an assignment  
+end note
+
+
+
+
+@enduml
