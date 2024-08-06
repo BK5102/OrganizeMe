@@ -9,6 +9,14 @@ from typing import List
 
 router = APIRouter()
 
+
+class Task_SerializerReq(BaseModel):
+    stuIDT: str
+    task: str
+
+    class Config:
+        orm_mode = True
+
 class Task_Serializer(BaseModel):
     taskID: int
     stuIDT: int
@@ -25,13 +33,13 @@ def get_all_Tasks():
     return tasks
 
 @router.post("/task", response_model=Task_Serializer, status_code=status.HTTP_201_CREATED)
-def create_new_Task(task:Task_Serializer):
+def create_new_Task(task:Task_SerializerReq):
     db_task = db.query(Tasks).filter(Tasks.task == task.task).first()
 
     if db_task is not None:
         raise HTTPException(status_code=400, detail="Task already exists.")
     
-    new_task = Tasks(task.stuIDT,task.task)
+    new_task = Tasks(int(task.stuIDT),task.task)
 
     try:
         db.add(new_task)
