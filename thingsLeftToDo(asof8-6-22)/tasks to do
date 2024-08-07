@@ -4,3 +4,4 @@
 //implement toast correctly for each option on dropdown
 // allow only one button to be clicked by the user (to do list or course organizer)
 // fastapi w/ jwt & Keycloak		https://testdriven.io/blog/fastapi-jwt-auth/ 
+// must work dynamically (both mobile and desktop)
