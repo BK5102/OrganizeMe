@@ -16,8 +16,6 @@ CREATE TABLE student (
 
 );
 
-INSERT INTO student(firstName, lastName, email, pass) VALUES ('bob', 'theMinion', 'stealtheMoon@gmail.com', 'password');
-
 CREATE TABLE class_organizer (
 	organizerID INT (255) AUTO_INCREMENT,
     studentID INT (20),
